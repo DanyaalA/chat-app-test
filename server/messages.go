@@ -88,6 +88,31 @@ var broadcast = make(chan Operation)        // Broadcast channel
 var privateBroadcast = make(chan Operation) // Private broadcast channel
 var upgrader = websocket.Upgrader{}         // Connection upgrader
 
+/*
+//Using a global Variable for Map is unsafe for goroutines so converting this into an object can help solve any problems that might occur later on.
+//https://godoc.org/sync#Map
+//Gorrila Chat Example for more info https://github.com/gorilla/websocket/tree/master/examples/chat
+
+
+//Proposed Update to Move Above Code into its own Struct to Make the Map field (All Clients) Concurrency Friendly
+type Lobby struct {
+	clients map[string]Client
+	broadcast chan []byte
+	privateBroadcast chan []byte
+}
+
+//You would then need to create a func initializing them and find a suitable place to run this func probably at the start of main? 
+//You Also need to edit the rest of the code to use the struct instead of the global variables
+//
+func newLobby() *Lobby {
+	return &Lobby{
+		clients: make(map[string]Client,
+		broadcast: make(chan Operation),
+		privateBroadcast: make(chan Operation)
+	}
+}
+*/
+
 // Initialize the HTTPS server
 func startMessagesWebSocket() {
 	// Configure websocket route
